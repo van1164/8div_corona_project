@@ -25,7 +25,7 @@ SECRET_KEY = '@dp6he)_)#&6^)0&d_1z!31y4mq-y+eum)xvlnbd(lh3735r+('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1',' van133.pythonanywhere.com']
+ALLOWED_HOSTS = ['127.0.0.1','van133.pythonanywhere.com']
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 # SESSION_COOKIE_AGE = 60*60*24*365*2 # in seconds, we are going to make this every 2 years so 60 seconds * 60 minutes * 24 hours * 365 days * 2 years
