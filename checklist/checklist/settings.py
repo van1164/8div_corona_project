@@ -42,12 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corona.apps.CoronaConfig',
-    'fcm_django'
 ]
 
-FCM_DJANGO_SETTINGS = {
-    'FCM_SERVER_KEY ': ''  #enter api key 
-}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
