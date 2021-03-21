@@ -1,0 +1,240 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>{{title}}</title>
+    <style>
+        td{
+            text-align: center;
+            width: 80px; height: 50px;
+            color:black
+        }
+        th{
+            text-align: center;
+        }
+        a{
+            background-color: transparent; /* Green */
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;    
+            border-style: none
+        }
+        #submitt{
+            font-family: "Roboto","Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif!important;
+            font-weight: 550;
+        }
+    </style>
+
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+    <link href="{% static 'css/sb-admin-2.min.css'%}" rel="stylesheet">
+</head>
+<body id="page-top" style= "height:auto">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3" style = "text-align: center; background-color: #2056ac;">
+            <h6 class="m-0 font-weight-bold text-primary" style = "text-align : center;margin-top : 11px!important; color: white!important;">{{title}}</h6>
+        </div>
+        <div class="card-body">
+            <h4 class="small font-weight-bold">문진표 실시현황 <span
+                    class="float-right">{{percentage_done}}%</span></h4>
+            <div class="progress mb-4">
+                <div class="{{style_all}}" role="progressbar" style="width:{{percentage_done}}%"
+                    aria-valuenow="{{percentage_done}}" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+    </div>
+    <div style="flex-direction: row;">
+        {% if is_owner %}
+            {% if not complete %}
+            <div class ="{{danger}}"style="margin-bottom:5%; padding:0px"> <div class = "{{danger_2}}" style="font-size: large; font-weight:bold; color:black;padding:0px; text-align:center">{{danger_3}}</div></div>
+            {% else %}
+                {% if not submitted %}
+                <form action="submit" method="post" id="login-form">
+                    <input type="hidden" name="csrfmiddlewaretoken" value="lYh6IULK41BHoFiK6GBdlQn3U5PAyRxq9FSEeAsuO3vWB1ai3AsICy9ArOUGtjSr">
+                {% csrf_token %}
+                <input type="submit" id="submitt" class="btn btn-primary btn-icon-split btn-lg" style="width:100%; height:45px; background-color: #1cc88a; border-color: #1cc88a!important; margin-bottom: 20px;" value="제출하기">
+                </form>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+        {% if permission %}
+        <form action="brigade" method="post" id="login-form" style = "background-color:#2056ac; width:70px; border-radius: 35px; height:70px; left:23px; bottom: 23px; z-index:20; position: fixed;">
+            <input type="hidden" name="csrfmiddlewaretoken" value="lYh6IULK41BHoFiK6GBdlQn3U5PAyRxq9FSEeAsuO3vWB1ai3AsICy9ArOUGtjSr">
+            {% csrf_token %}
+            <input type="hidden" name="brigade_id" value = "{{brigade_id}}" autofocus="" autocapitalize="none" autocomplete=""  required="" id="brigade_id">
+            <input type="submit" style = "width:70px; height:70px; font-size:x-large; background-color: transparent; border-color: transparent; color: white!important; font-weight: 800; " value="&#8592">
+        </form>
+        {% endif %}
+        <form action="home" method="post" id="login-form" style = "background-color:#2056ac; width:70px; border-radius: 35px; height:70px; right:23px; bottom: 23px; z-index:20; position: fixed;">
+            <input type="hidden" name="csrfmiddlewaretoken" value="lYh6IULK41BHoFiK6GBdlQn3U5PAyRxq9FSEeAsuO3vWB1ai3AsICy9ArOUGtjSr">
+            {% csrf_token %}
+            <input type="submit" style="width:70px; height:70px; font-size:medium; background-color: transparent; border-color: transparent; color: white!important; font-weight: 600; " value="NEWS">
+        </form>
+        <div class="container-fluid" style="width:49.5%; margin:0px; float:left; padding:0px">
+            <div class="card shadow mb-4" style="width:100%">
+                <div class="card-header py-3" style = "background-color: #2056ac;">
+                    <h6 class="m-0 font-weight-bold text-primary" style="text-align:center; color: white!important;">인원현황</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th style="width: 60px; text-align: center;">구분</th>
+                                    <th style="width: 80px; text-align: center;">인원</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="text-align: center; width:60px; font-size:smaller">총원</td>
+                                    <td>{{total}}</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; width:60px; font-size:smaller">정상출근</td>
+                                    <td>{{normal}}</td>                         
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; width:60px; font-size:smaller">재택근무</td>
+                                    <td>{{home}}</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; width:60px; font-size:smaller">미실시</td>
+                                    <td>{{notdone}}</td>                                       
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; width:60px; font-size:smaller">출근율</td>
+                                    <td>{{percentage_normal}}%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid" style="width:49.5%; margin:0px; float:right; padding:0px">
+            <div class="card shadow mb-4" style="width:100%">
+                <div class="card-header py-3" style = "background-color: #2056ac;">
+                    <h6 class="m-0 font-weight-bold text-primary" style="text-align:center; color: white!important;">재택근무</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th style="width: 70px; text-align: center; ">구분</th>
+                                    <th style="width: 100px; text-align: center;">이름</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for person in house %}
+                                <tr>
+                                    <td style="text-align: center; width:70px">{{person.idx}}</td>
+                                    <form action="officer_result" name="form" id="form" method="post">
+                                        <input type="hidden" name="csrfmiddlewaretoken" value="lYh6IULK41BHoFiK6GBdlQn3U5PAyRxq9FSEeAsuO3vWB1ai3AsICy9ArOUGtjSr">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="officer_id" value = "{{person.id}}" autofocus="" autocapitalize="none" autocomplete=""  required="" id="officer_id">
+                                        <td style="text-align: center; width:30px;">
+                                        <input type="submit" value="{{person.username}}" style="width:100%; height:100%; border:none; background-color:white">
+                                        </td>
+                                    </form>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <div style="flex-direction: row;">
+                <div class="container-fluid" style="width:49.5%; margin:0px; float:left; padding:0px">
+                    <div class="card shadow mb-4" style="width:100%">
+                        <div class="card-header py-3" style = "background-color: #2056ac;">
+                            <h6 class="m-0 font-weight-bold text-primary" style="text-align:center; color:white!important;">실시자</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 10px; text-align: center;"></th>
+                                            <th style="width: 80px; text-align: center;">이름</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for i in done %}
+                                        <tr>
+                                            <td style="text-align: center; width:10px; font-size:smaller">{{i.idx}}</td>
+                                            <td>{{i.username}}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid" style="width:49.5%; margin:0px; float:right; padding:0px">
+                    <div class="card shadow mb-4" style="width:100%">
+                        <div class="card-header py-3" style = "background-color: #2056ac;">
+                            <h6 class="m-0 font-weight-bold text-primary" style="text-align:center; color: white!important;">미실시자</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 10px; text-align: center;"></th>
+                                            <th style="width: 100px; text-align: center;">이름</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for i in not_finished %}
+                                        <tr>
+                                            <td style="text-align: center; width:10px">{{i.idx}}</td>
+                                            <td>{{i.username}}</td>     
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>                
+        </div>
+        {% for i in diff %}
+        <br>
+        <br>
+        <br>
+        <br>
+        {% endfor %}
+            <footer class="sticky-footer bg-white" style = "width:100%; height:100px; z-index: -10;">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; K.S.H & P.S.J</span>
+                    </div>
+                    
+                </div>
+            </footer>
+            {% if is_owner %}
+                <form action="edit_survey" name="form" id="form" method="get" style = "width: 100%; height:60px;">
+                    <input type="hidden" name="csrfmiddlewaretoken" value="lYh6IULK41BHoFiK6GBdlQn3U5PAyRxq9FSEeAsuO3vWB1ai3AsICy9ArOUGtjSr">
+                    {% csrf_token %}
+                    <input type="submit" style="width: 100%; background-color: rgb(153, 15, 153); height : 60px; color: white!important; font-weight: 600; font-size: x-large; border:none!important" value="설문지 변경하기">                    
+                </form>
+            {% endif %}
+</body>

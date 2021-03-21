@@ -1,0 +1,117 @@
+{%load static%}
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <meta property="og:title" content="8사단 코로나19 사전 설문조사">
+    <meta property="og:description" content="">
+    <meta property="og:image" content="">
+    <title>8사단 코로나19 사전 설문조사</title>
+    <link href="{% static 'css/bootstrap.min.css'%}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/common.css'%}">
+</head>
+<body oncontextmenu="return false" onselectstart="return false"><div id="loading" style="display: none;"></div>
+	
+	<div id="wrap" class="container">
+<link href="{% static 'css/datepicker.css' %}" rel="stylesheet">
+
+<style type="text/css">
+	#header						{ background-color: #2056ac; }
+	.footer	.btn-start			{ background-color: #2056ac; }
+	.footer	.btn-next			{ background-color: #2056ac; }
+	.survey_sb_list .quest .required	{ color: #2056ac;}
+	.survey_sb_list	.quest .q	{ color: #2056ac; }
+	.survey_sb_list .questType3 .evalueType2 label > div.score > .circle-on { background-color: #2056ac; border-color: #2056ac;}
+	.survey_sb_list .answer-area .star-on { background-color: #2056ac; }
+	.survey_sb_list .answer-area .score-star .total-score { color: #2056ac; }
+	.survey_sb_list .answer-area .number-on { border-color: #2056ac; color: #2056ac;}
+	#pageView #thumb			{ background: #2056ac; }
+	#pageView .text				{ color: #2056ac; }
+	.form-control:focus { border-color: #2056ac; }
+	#rewardPhoneLayer .input-group	input[type=button] {background-color: #2056ac;}
+</style>
+
+<input type="hidden" id="pageCount" value="1">
+<input type="hidden" id="questCount" value="10">
+<input type="hidden" id="userQuestCount" value="10">
+<input type="hidden" id="bgColor" value="#2056ac">
+<input type="hidden" id="quick" value="y">
+
+<div id="header"><div class="title">코로나19 사전 설문조사</div></div>
+<div id="pageView" style="display:none">
+	<div class="track">
+		<div id="thumb"></div>
+	</div>
+	<div class="text">
+		<span id="currentPage"></span>/<span id="totalPage"></span>
+	</div>
+</div>
+<div id="questView">	
+<form action="finish" name="form" id="form" method="post">
+	<input type="hidden" name="csrfmiddlewaretoken" value="lYh6IULK41BHoFiK6GBdlQn3U5PAyRxq9FSEeAsuO3vWB1ai3AsICy9ArOUGtjSr">
+	<input type="hidden" name="questionnaire_id" id="questionnaire_id" value="{{questionnaire_id}}">
+	{% csrf_token %}
+	<div class="survey_list">	
+		{%for result in results%}
+		<div class="survey_sb_list page1" id="quest_main0_2" optional="false">
+			<div class="quest">
+				<input type="hidden" class="quest_page" value="1">
+				<input type="hidden" name="quest_tc_2" id="quest_tc_2" value="1">
+				<input type="hidden" class="quest_evalue_type" value="1">
+				<input type="hidden" class="quest_answer_form" value="1">
+				<input type="hidden" name="answer_choice_cnt_2" id="answer_choice_cnt_2" value="1">
+                <input type="hidden" name="answer_input_cnt_2" id="answer_input_cnt_2" value="4">
+				<input type="hidden" name="answer_choice_min_2" id="answer_choice_min_2" value="1">
+				<div class="q">Q{{result.idx}}</div>
+				<div class="cntn">
+					<pre>{{result.question}}</pre>
+					<p class="required">*필수 응답 문항</p>
+				</div>
+			</div>
+			<div class="answer-area clearfix">
+				<div class="answer choice choice-9">
+					<div class="q">
+						<input type="radio" name="{{result.name}}" id="{{result.idx}}0" value="1"  questinfo="" required = "required">
+					</div>
+					<div class="cntn">
+						<label for="{{result.idx}}0" style="white-space: nowrap;">
+								예
+						</label>
+					</div>
+				</div>			
+				<div class="answer choice choice-9">
+					<div class="q">
+						<input type="radio" name="{{result.name}}" id="{{result.idx}}1" value="2" questinfo="" required = "required">
+					</div>
+					<div class="cntn">
+						<label for="{{result.idx}}1" style="white-space: nowrap;">
+								아니오
+						</label>
+					</div>
+				</div>			
+			</div>
+		</div>
+		{%endfor%}
+		<div class="survey_ex_list page1">
+			<div class="guide"><p>개인정보 수집 및 이용 동의하시면 응답 완료하시기 바랍니다.<br>- 목적 : 코로나 바이러스 관련 방문자 확인<br>- 항목 : 이름, 연락처, 생년월일<br>- 보유기간 : 사용 목적 달성후 즉시 폐기</p><p><br></p><p><br></p></div>
+		</div>
+	</div>
+</div>
+<div class="footer">
+	<div class="container">
+		<div class="clearfix">
+			<div class="pull-left" id="btnPrev" style="display:none;">
+				<input type="button" value="이전" class="btn-prev">
+			</div> 
+			<div> 
+			
+			<input type="submit" value="설문 제출" id="btnSave" class="btn-next">
+			</div>
+		</div>
+	</div>
+</div>
+	</form>
+	
+
+</body></html>

@@ -1,0 +1,104 @@
+{%load static%}
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <meta property="og:title" content="8사단 코로나19 사전 설문조사">
+    <meta property="og:description" content="">
+    <meta property="og:image" content="">
+    <title>코로나19 현황</title>
+    <link href="{% static 'css/bootstrap.min.css'%}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/common.css'%}">
+</head>
+<body oncontextmenu="return false" onselectstart="return false"><div id="loading" style="display: none;"></div>
+	
+	
+<link href="{% static 'css/datepicker.css' %}" rel="stylesheet">
+
+<style type="text/css">
+	#header						{ background-color: #2056ac; }
+	.footer	.btn-start			{ background-color: #2056ac; }
+	.footer	.btn-next			{ background-color: #2056ac; }
+	.survey_sb_list .quest .required	{ color: #2056ac;}
+	.survey_sb_list	.quest .q	{ color: #2056ac; }
+	.survey_sb_list .questType3 .evalueType2 label > div.score > .circle-on { background-color: #2056ac; border-color: #2056ac;}
+	.survey_sb_list .answer-area .star-on { background-color: #2056ac; }
+	.survey_sb_list .answer-area .score-star .total-score { color: #2056ac; }
+	.survey_sb_list .answer-area .number-on { border-color: #2056ac; color: #2056ac;}
+	#pageView #thumb			{ background: #2056ac; }
+	#pageView .text				{ color: #2056ac; }
+	.form-control:focus { border-color: #2056ac; }
+	#rewardPhoneLayer .input-group	input[type=button] {background-color: #2056ac;}
+	.datatext-container {color:black; font-family: Verdana, Geneva, Tahoma, sans-serif; margin-top: 38px;}
+	.datacontainers {width: 50%; margin : 0px; padding : 0px; height: 200px; text-align: center; font-size: 34px;}
+	.labell {color:#2056ac; font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; font-size: 21px; font-weight: bold; margin-top: 40px; width:100%; height:30px; text-align: center;}
+	#mapper {width:100%; height : 400px; padding: 0px; margin:0px; text-align: center;}
+</style>
+<div id="wrap" class="container"></div>
+<div class="card-header py-3" style = "text-align: center; background-color: #2056ac;">
+	<h3 class="m-0 font-weight-bold text-primary" style = "text-align : center; margin:0px!important; padding-top:22px; height:70px;color: white!important; font-weight: 700;">코로나19 현황</h3>
+</div>
+<input type="hidden" id="pageCount" value="1">
+<input type="hidden" id="questCount" value="10">
+<input type="hidden" id="userQuestCount" value="10">
+<input type="hidden" id="bgColor" value="#2056ac">
+<input type="hidden" id="quick" value="y">
+<div id="pageView" style="display:none">
+	<div class="track">
+		<div id="thumb"></div>
+	</div>
+		
+	<div class="text">
+		<span id="currentPage"></span>/<span id="totalPage"></span>
+	</div>
+</div>
+<div id="questView">
+	<input type="hidden" name="csrfmiddlewaretoken" value="lYh6IULK41BHoFiK6GBdlQn3U5PAyRxq9FSEeAsuO3vWB1ai3AsICy9ArOUGtjSr">
+	<iframe src="http://ncov.mohw.go.kr/" width="100%" height="1280" style="border:none;">
+	</iframe>
+</div>
+<div class="footer" style = "position: fixed;">
+	<div class="container">
+		<div class="clearfix" style = "background-color: transparent;">
+			<div style = "background-color: transparent;">
+				{% if is_admin %}
+					{% if access == "Ba" %}
+						<form action="battalion" name="form" id="form" method="post" style = "display: inline;">
+							<input type="hidden" name="battalion_id" value = "{{battalion_id}}" autofocus="" autocapitalize="none" autocomplete=""  required="" id="battalion_id">
+					{% elif access == "Br" %}
+						<form action="brigade" name="form" id="form" method="post" style = "display: inline;">
+							<input type="hidden" name="brigade_id" value = "{{brigade_id}}" autofocus="" autocapitalize="none" autocomplete=""  required="" id="brigade_id">
+					{% else %}
+						<form action="division" name="form" id="form" method="post" style = "display: inline;">
+					{% endif %}
+					{% csrf_token %}
+					<button id="btnSave" class="btn-next"><input id = "btnSave" class = "btn-next" type="submit" value="문진현황" style="width: 100%; color:rgb(228, 229, 245);"></button>
+					</form>
+					{% if done %}
+					<form action="submit" name="form" id="form" method="post" style = "display: inline;">
+						{% csrf_token %}
+						<button id="btnSave" class="btn-next"><input id = "btnSave" class = "btn-next" type="submit" value="제출하기" style="width: 100%; color:rgb(228, 229, 245);"></button>
+					</form>
+					{% endif %}
+				{% else %}
+					{% if done == False %}
+					<form action="poll" name="form" id="form" method="post" style = "display : inline;">
+						<input type="hidden" name="csrfmiddlewaretoken" value="lYh6IULK41BHoFiK6GBdlQn3U5PAyRxq9FSEeAsuO3vWB1ai3AsICy9ArOUGtjSr">
+						{% csrf_token %}
+						<button id="btnSave" class="btn-next"><input id = "btnSave" class = "btn-next" type="submit" value="설문으로" style="width: 100%; color:white;"></button>
+					</form>
+					{% endif %}
+					<form action="officer_result" name="form" id="form" method="post" style = "display: inline;">
+						<input type="hidden" name="csrfmiddlewaretoken" value="lYh6IULK41BHoFiK6GBdlQn3U5PAyRxq9FSEeAsuO3vWB1ai3AsICy9ArOUGtjSr">
+						<input type="hidden" name="is_officer" value = "True" autofocus="" autocapitalize="none" autocomplete="password"  required="" id="id_password">
+						<input type="hidden" name="officer_id" value = "{{officer_id}}" autofocus="" autocapitalize="none" autocomplete=""  required="" id="officer_id">
+						{% csrf_token %}
+						<button id="btnSave" class="btn-next"><input id = "btnSave" class = "btn-next" type="submit" value="과거력" style="width: 100%; color:white;"></button>
+					</form>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</div>
+</body></html>

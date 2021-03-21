@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>{{title}}</title>
+    <style>
+        td{
+            text-align: center;
+            width: 80px; height: 50px;
+            color:black
+        }
+        th{
+            text-align: center;
+        }
+    </style>
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+    <link href="{% static 'css/sb-admin-2.min.css'%}" rel="stylesheet">
+</head>
+<body id="page-top">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3" style = "text-align: center; background-color: #2056ac;">
+            <h6 class="m-0 font-weight-bold text-primary" style = "color:white!important;text-align : center;margin-top : 11px!important;display: inline-block;">{{title}}</h6>
+        </div>
+        <br>
+        <div style="flex-direction: row;">
+            <div class="container-fluid" style="width:100%; margin:0px; float:left; padding:0px">
+                {% if is_empty %}
+                <h6 style = "text-align: center; font-size: x-large; font-weight: 700; color:black; margin-bottom: 20px;"> 아직 문진기록이 없습니다. </h6>
+                {% else %}
+                {% for item in results %}
+                <div style="color:black; font-weight:bold;"> {{item.date}}</div>
+                <div class="card shadow mb-4" style="width:100%">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 60px; text-align: center; color:black">예를 체크한 항목</th>
+                                    </tr>
+                                </thead>                                 
+                                <tbody>
+                                    {% for question in item.result%}
+                                    <tr>
+                                        <td style="text-align: center;">{{question}}</td>
+                                    </tr>
+                                    {%endfor%}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+            {% if is_officer %}
+                <form action="home" method="post" id="login-form" style = "background-color:#2056ac; width:70px; border-radius: 35px; height:70px; left:23px; bottom: 23px; z-index:20; position: fixed;">
+            {% else %}
+                <form action="battalion" method="post" id="login-form" style = "background-color:#2056ac; width:70px; border-radius: 35px; height:70px; left:23px; bottom: 23px; z-index:20; position: fixed;">
+                <input type="hidden" name="battalion_id" value = "{{battalion.id}}" autofocus="" autocapitalize="none" autocomplete=""  required="" id="battalion_id">
+            {% endif %}
+                <input type="hidden" name="csrfmiddlewaretoken" value="lYh6IULK41BHoFiK6GBdlQn3U5PAyRxq9FSEeAsuO3vWB1ai3AsICy9ArOUGtjSr">
+                {% csrf_token %}
+                <input type="submit" style="width:70px; height:70px; font-size:x-large; background-color: transparent; border-color: transparent; color: white!important; font-weight: 600; " value="&#8592;">
+            </form>
+        </div>
+    </div>
+</body>

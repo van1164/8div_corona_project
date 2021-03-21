@@ -1,0 +1,144 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>{{title}}</title>
+    <style>
+        td{
+            text-align: center;
+            width: 80px; height: 50px;
+        }
+        th{
+            text-align: center;
+        }
+        a{
+            background-color: transparent; /* Green */
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;    
+            border-style: none
+        }
+        .hide{
+            display: none;
+            border:none!important;
+            background-color: transparent; 
+            color:black;
+            text-align: center;
+            width : 90px;
+            height : 50px;
+            position: relative;
+            left : 35%;
+        }
+        .hoverbar{
+            display: inline-block;
+            color : white!important;
+            border : none!important;
+            border-bottom: 1px solid #e3e6f0!important;
+            border-top: 1px solid #e3e6f0!important;
+        }
+        .hoverbar:hover{
+            border-width: 2px;
+            border-color: yellow;
+        }
+        .hoverbar:hover + .hide{
+            display : block;
+        }
+        .hoverbar:hover + td.hoverbar + .hide{
+            display : block;
+        }
+        p{
+            margin-bottom : 0!important;
+        }
+        
+    </style>
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+    <link href="{% static 'css/sb-admin-2.min.css'%}" rel="stylesheet">
+</head>
+<body id="page-top">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3" style = "text-align: center; background-color: #2056ac;">
+            {% csrf_token %}
+            <h6 class="m-0 font-weight-bold text-primary" style = "text-align : center;margin-top : 11px!important; color: white!important;">{{title}}</h6>
+        </div>
+        <div class="card-body">
+            <h4 class="small font-weight-bold">문진표 실시현황 <span
+                    class="float-right">{{percentage_done}}%</span></h4>
+            <div class="progress mb-4">
+                <div class="{{style_all}}" role="progressbar" style="width:{{percentage_done}}%"
+                    aria-valuenow="{{percentage_done}}" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+        <div style="flex-direction: row;">
+            <form action="home" method="post" id="login-form" style = "background-color:#2056ac; width:70px; border-radius: 35px; height:70px; right:23px; bottom: 23px; z-index:20; position: fixed;">
+                <input type="hidden" name="csrfmiddlewaretoken" value="lYh6IULK41BHoFiK6GBdlQn3U5PAyRxq9FSEeAsuO3vWB1ai3AsICy9ArOUGtjSr">
+                {% csrf_token %}
+                <input type="submit" style="width:70px; height:70px; font-size:medium; background-color: transparent; border-color: transparent; color: white!important; font-weight: 600; " value="NEWS">
+            </form>
+            <div class="container-fluid" style="width:100%; margin:0px; float:left; padding:0px">
+                <div class="card shadow mb-4" style="width:100%">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary" style="text-align:center">전체현황</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 20%; text-align: center;">이름</th>
+                                        <th style="width: 80%; text-align: center;">현황</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for brigade in brigades %}
+                                        {% if brigade.submitted %}
+                                            <tr>
+                                                <form action="brigade" name="form" id="form" method="post">
+                                                    <input type="hidden" name="csrfmiddlewaretoken" value="lYh6IULK41BHoFiK6GBdlQn3U5PAyRxq9FSEeAsuO3vWB1ai3AsICy9ArOUGtjSr">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="brigade_id" value = "{{brigade.brig.id}}" autofocus="" autocapitalize="none" autocomplete=""  required="" id="brigade_id">
+                                                    <td style="text-align: center; width:30px; font-size:smaller">
+                                                    <input type="submit" value="{{brigade.brig.name}}" style="width:100%; height:100%; border:none; background-color:white; font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; color: #2056ac; font-weight:bolder;"></td>
+                                                    {% if brigade.percentage_house == 0 %}
+                                                        <td class="hoverbar bg-success" role="progressbar" style="width:{{brigade.percentage_rest}}%; background-color : #2056ac99; padding-top:12px;"aria-valuenow="{{brigade.percentage_rest}}" aria-valuemin="0" aria-valuemax="100">{{brigade.percentage_rest}}</td>
+                                                    {% else %}
+                                                        {% if brigade.percentage_rest == 0 %}
+                                                            <td class="hoverbar bg-danger" role="progressbar" style="width:{{brigade.percentage_house}}%; padding-top:12px;"aria-valuenow="{{brigade.percentage_house}}" aria-valuemin="0" aria-valuemax="100">{{brigade.percentage_house}}</td>
+                                                        {% else %}
+                                                            <td class="hoverbar bg-success" role="progressbar" style="width:{{brigade.percentage_rest}}%; background-color:#2056ac99; padding-top:12px;"aria-valuenow="{{brigade.percentage_rest}}" aria-valuemin="0" aria-valuemax="100">{{brigade.percentage_rest}}</td>
+                                                            <td class="hoverbar bg-danger" role="progressbar" style="width:{{brigade.percentage_house}}%; padding-top:12px;"aria-valuenow="{{brigade.percentage_house}}" aria-valuemin="0" aria-valuemax="100">{{brigade.percentage_house}}</td>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                    <td class = "hide">
+                                                        <p>정상 : {{brigade.num_rest}}명</p>
+                                                        <p>이상 : {{brigade.num_house}}명</p>
+                                                    </td>
+                                                </form>
+                                            </tr>
+                                        {% else %}
+                                            <tr>
+                                                <td style="text-align: center; width:30px; font-size:smaller"><p style="text-align : center; color:#2056ac; margin:auto; font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; font-weight:bolder;">{{brigade.brig.name}}</p></td>
+                                                <td> 아직 확인이 불가합니다. </td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; K.S.H & P.S.J</span>
+                    </div>
+                </div>
+            </footer>
+</body>
