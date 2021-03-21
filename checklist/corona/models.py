@@ -11,7 +11,8 @@ class 대대(models.Model):
         return str(self.id) + '. ' +self.name
 
 class 간부(models.Model):
-    user = models.OneToOneField(User)
+    username = models.CharField(max_length =20, default = "무효")
+    password = models.CharField(max_length = 30, default = "A")
     battalion = models.ForeignKey('대대', on_delete = models.PROTECT)
 
     def __str__(self):
@@ -31,7 +32,8 @@ class 사단(models.Model):
         return str(self.id) + '. '+ self.name
 
 class 관리자(models.Model):
-    user = models.OneToOneField(User)
+    username = models.CharField(max_length =20, default = "무효")
+    password = models.CharField(max_length = 30, default = "A")
     access_levels = (
         ('Di', '사단장급'), # Division
         ('Br', '여단장급'), # Brigade
@@ -133,7 +135,7 @@ class 문진결과(models.Model):
     owner = models.ForeignKey(간부, on_delete = models.CASCADE)
     battalion = models.ForeignKey(대대, on_delete = models.PROTECT)
     questionnaire = models.ForeignKey(질문지, on_delete = models.PROTECT)
-    date = models.DateField(auto_now_add = False)
+    date = models.DateField(auto_now_add = True)
     A1 = models.BooleanField()
     A2 = models.BooleanField()
     A3 = models.BooleanField()

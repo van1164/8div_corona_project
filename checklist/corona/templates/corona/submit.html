@@ -38,13 +38,10 @@
     <br>
     <br>
     <br>
-    <form action="/adminhome" method="post" id="return-to-data"><input type="hidden" name="csrfmiddlewaretoken" value="lYh6IULK41BHoFiK6GBdlQn3U5PAyRxq9FSEeAsuO3vWB1ai3AsICy9ArOUGtjSr">
+    <form action="home" method="post" id="return-to-data">
+        <input type="hidden" name="csrfmiddlewaretoken" value="lYh6IULK41BHoFiK6GBdlQn3U5PAyRxq9FSEeAsuO3vWB1ai3AsICy9ArOUGtjSr">
         {% csrf_token %}
         <div class="submit-row" style = "height : 50px;">
-            <input type="hidden" name="username" value="{{username}}" autofocus="" autocapitalize="none" autocomplete="{{username}}" maxlength="150" required="" id="id_username">
-            <input type="hidden" name="id" value="{{id}}" autofocus="" autocapitalize="none" autocomplete="{{id}}" maxlength="150" required="" id="id">
-            <input type="hidden" name="password" value ="{{password}}" autofocus="" autocapitalize="none" autocomplete="{{password}}" required="" id="id_password">
-            <input type="hidden" name="next" value="/admin/">
             <input type="submit" value="&larr; 코로나 현황으로" style="height: 40px;background-color: transparent; font-size: x-large; color : #2d6fd8; border:0px; padding-top: 5px;">
         </div>
     </form>

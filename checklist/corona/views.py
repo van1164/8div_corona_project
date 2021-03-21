@@ -30,7 +30,7 @@ def create_pwd():
     pwd = ""
     for i in range(4):
         pwd += chr(random.randint(33,126)) #vertical bar | vs I vs l !!! needs to be distinguished
-    return 'default' + pwd
+    return pwd
 
 '''
 def get_client_ip(request):
